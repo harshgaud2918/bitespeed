@@ -45,7 +45,16 @@ def update_existing_contacts(email, phone_number):
         contact.save()
 
 
-def create_new_contact(email, phone_number, link_precedence, linked_id):
+def create_fresh_contact(email, phone_number, link_precedence):
+    new_contact = Contact.objects.create(
+        email=email,
+        phone_number=phone_number,
+        link_precedence=link_precedence,
+    )
+    new_contact.save()
+
+
+def create_new_linked_contact(email, phone_number, link_precedence, linked_id):
     new_contact = Contact.objects.create(
         email=email,
         phone_number=phone_number,
@@ -53,10 +62,6 @@ def create_new_contact(email, phone_number, link_precedence, linked_id):
         linked_id=linked_id,
     )
     new_contact.save()
-
-
-def create_new_contact(email, phone_number, link_precedence):
-    create_new_contact(email, phone_number, link_precedence, None)
 
 
 @api_view(["POST"])
@@ -67,7 +72,7 @@ def identify(request):
     if not Contact.objects.filter(
         Q(email=email) | Q(phone_number=phone_number)
     ).exists():
-        create_new_contact(email, phone_number, link_precedence)
+        create_fresh_contact(email, phone_number, link_precedence)
         return get_custom_response(
             Contact.objects.filter(email=email, phone_number=phone_number)
         )
@@ -96,7 +101,7 @@ def identify(request):
         update_existing_contacts(email, phone_number)
     elif phone_number is not None and email is not None:
         link_precedence = "secondary"
-        create_new_contact(email, phone_number, link_precedence, linked_id)
+        create_new_linked_contact(email, phone_number, link_precedence, linked_id)
 
     return get_custom_response(
         Contact.objects.filter(

@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-42w@n^c&(nay*(bp1jb4=#%r@8w(s9bv0&l)!!gcofjbuwyxk=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["bitespeed-gs3m.onrender.com"]
+ALLOWED_HOSTS = ["bitespeed-gs3m.onrender.com", "127.0.0.1"]
 
 
 # Application definition
